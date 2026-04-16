@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Visita - Electrical Security</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            margin: 0;
+            background-color: #001a4c;
+            /* Textura de fundo azul */
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4uUzAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGovxNEIAAAAnSURBVDjLY2ADAkYmRjigpI6BkYmZCWyYmREpYmZGpIiZGZEiZmYAtvAAn98mS8IAAAAASUVORK5CYII=');
+        }
+
+        .container { 
+            max-width: 400px; 
+            width: 100%; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            text-align: center;
+        }
+
+        /* Estilo da Logo dentro da parte branca */
+        .logo-box {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .logo-box img {
+            width: 100%;
+            max-width: 280px; /* Tamanho da logo */
+            height: auto;
+            border-radius: 10px;
+        }
+
+        h2 { 
+            color: #ff9d00; 
+            margin: 10px 0 20px 0;
+            text-transform: uppercase;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        label { 
+            font-weight: bold; 
+            display: block; 
+            margin-top: 15px; 
+            color: #001a4c; 
+            text-align: left;
+            font-size: 14px;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 5px; 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+        }
+
+        .btn-loc { 
+            background-color: #3498db; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin-top: 8px; 
+            width: 100%; 
+            font-weight: bold;
+        }
+
+        button#enviar { 
+            width: 100%; 
+            padding: 15px; 
+            background-color: #ff9d00; 
+            color: #001a4c; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: bold; 
+            margin-top: 25px;
+            box-shadow: 0 4px 0 #cc7a00;
+        }
+
+        .status-loc { font-size: 12px; color: #27ae60; display: none; margin-top: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-box">
+        <img src="https://i.ibb.co/3ykpG04v/electrical-security.png" alt="Logo Electrical Security">
+    </div>
+
+    <h2>Formulário de Visita</h2>
+    
+    <label>Seu Nome:</label>
+    <input type="text" id="nome" placeholder="Seu nome completo">
+
+    <label>Seu WhatsApp:</label>
+    <input type="tel" id="whatsapp_cliente" placeholder="(00) 00000-0000">
+    
+    <label>Endereço Completo:</label>
+    <input type="text" id="endereco" placeholder="Rua, número e bairro">
+    
+    <label>Ponto de Referência:</label>
+    <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
+
+    <label>Localização GPS (Opcional):</label>
+    <button id="btnGps" class="btn-loc" onclick="pegarLocalizacao()">📍 Enviar minha Localização Atual</button>
+    <div id="status" class="status-loc">✅ Localização capturada!</div>
+    <input type="hidden" id="link_gps" value="Não enviado">
+
+    <button id="enviar" onclick="enviarWhatsApp()">AGENDAR NO WHATSAPP</button>
+</div>
+
+<script>
+    let carregandoGps = false;
+
+    function pegarLocalizacao() {
+        const btn = document.getElementById('btnGps');
+        carregandoGps = true;
+        btn.disabled = true;
+        btn.innerText = "Buscando sinal do GPS... ⏳";
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                document.getElementById('link_gps').value = `https://www.google.com/maps?q=${lat},${lon}`;
+                document.getElementById('status').style.display = "block";
+                carregandoGps = false;
+                btn.disabled = false;
+                btn.innerText = "📍 Localização Atualizada!";
+                btn.style.backgroundColor = "#27ae60";
+            }, function() {
+                alert("Erro ao acessar GPS. Digite o endereço manualmente.");
+                carregandoGps = false;
+                btn.disabled = false;
+                btn.innerText = "📍 Tentar novamente";
+            });
+        }
+    }
+
+    function enviarWhatsApp() {
+        if(carregandoGps) {
+            alert("Aguarde o GPS carregar!");
+            return;
+        }
+
+        const nome = document.getElementById('nome').value;
+        const zap = document.getElementById('whatsapp_cliente').value;
+        const end = document.getElementById('endereco').value;
+        const ref = document.getElementById('referencia').value;
+        const gps = document.getElementById('link_gps').value;
+        const meuNumero = "5581996625101"; 
+
+        if(!nome || !zap || !end) {
+            alert("Preencha os campos obrigatórios!");
+            return;
+        }
+
+        const msg = `*SOLICITAÇÃO DE VISITA*%0A%0A*Cliente:* ${nome}%0A*WhatsApp:* ${zap}%0A*Endereço:* ${end}%0A*Referência:* ${ref}%0A*Localização:* ${gps}`;
+        window.open(`https://api.whatsapp.com/send?phone=${meuNumero}&text=${msg}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
