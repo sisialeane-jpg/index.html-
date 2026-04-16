@@ -14,8 +14,6 @@
             min-height: 100vh;
             margin: 0;
             background-color: #001a4c;
-            /* Textura de fundo azul */
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4uUzAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGovxNEIAAAAnSURBVDjLY2ADAkYmRjigpI6BkYmZCWyYmREpYmZGpIiZGZEiZmYAtvAAn98mS8IAAAAASUVORK5CYII=');
         }
 
         .container { 
@@ -24,29 +22,24 @@
             background: white; 
             padding: 25px; 
             border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
             text-align: center;
         }
 
-        /* Estilo da Logo dentro da parte branca */
-        .logo-box {
+        /* Estilo da Logo */
+        .logo {
             width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .logo-box img {
-            width: 100%;
-            max-width: 280px; /* Tamanho da logo */
-            height: auto;
+            max-width: 250px;
+            margin-bottom: 15px;
             border-radius: 10px;
         }
 
         h2 { 
             color: #ff9d00; 
-            margin: 10px 0 20px 0;
+            margin-top: 0;
             text-transform: uppercase;
-            font-size: 22px;
-            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: 1px;
         }
 
         label { 
@@ -80,6 +73,8 @@
             font-weight: bold;
         }
 
+        .btn-loc:disabled { background-color: #bdc3c7; }
+
         button#enviar { 
             width: 100%; 
             padding: 15px; 
@@ -90,7 +85,7 @@
             cursor: pointer; 
             font-size: 18px; 
             font-weight: bold; 
-            margin-top: 25px;
+            margin-top: 20px;
             box-shadow: 0 4px 0 #cc7a00;
         }
 
@@ -100,9 +95,7 @@
 <body>
 
 <div class="container">
-    <div class="logo-box">
-        <img src="https://i.ibb.co/3ykpG04v/electrical-security.png" alt="Logo Electrical Security">
-    </div>
+    <img src="https://raw.githubusercontent.com/sisialeane-jpg/formulario-entrega/main/logo.png" class="logo" alt="Logo Electrical Security" onerror="this.src='https://i.ibb.co/3ykpG04v/electrical-security.png'">
 
     <h2>Formulário de Visita</h2>
     
@@ -116,7 +109,7 @@
     <input type="text" id="endereco" placeholder="Rua, número e bairro">
     
     <label>Ponto de Referência:</label>
-    <input type="text" id="referencia" placeholder="Ex: Próximo ao mercado">
+    <input type="text" id="referencia" placeholder="O que tem perto?">
 
     <label>Localização GPS (Opcional):</label>
     <button id="btnGps" class="btn-loc" onclick="pegarLocalizacao()">📍 Enviar minha Localização Atual</button>
@@ -146,7 +139,7 @@
                 btn.innerText = "📍 Localização Atualizada!";
                 btn.style.backgroundColor = "#27ae60";
             }, function() {
-                alert("Erro ao acessar GPS. Digite o endereço manualmente.");
+                alert("Erro no GPS. Verifique se a localização está ativa.");
                 carregandoGps = false;
                 btn.disabled = false;
                 btn.innerText = "📍 Tentar novamente";
@@ -156,7 +149,7 @@
 
     function enviarWhatsApp() {
         if(carregandoGps) {
-            alert("Aguarde o GPS carregar!");
+            alert("Aguarde o GPS...");
             return;
         }
 
@@ -168,7 +161,7 @@
         const meuNumero = "5581996625101"; 
 
         if(!nome || !zap || !end) {
-            alert("Preencha os campos obrigatórios!");
+            alert("Preencha Nome, WhatsApp e Endereço!");
             return;
         }
 
